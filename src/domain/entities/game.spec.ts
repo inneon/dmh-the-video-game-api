@@ -7,8 +7,8 @@ import Player from "./player"
 describe("game entity", () => {
   describe("player management", () => {
     it("can add a player to the game", () => {
-      const game = new Game(new Identifier(1), new Name("test game"))
-      const player = new Player(new Identifier(2), new Name("Davey McDaveson"))
+      const game = new Game(new Identifier(), new Name("test game"))
+      const player = new Player(new Identifier(), new Name("Davey McDaveson"))
 
       game.AddPlayer(player)
 
@@ -21,8 +21,8 @@ describe("game entity", () => {
     })
 
     it("cannot add the same player to a game twice", () => {
-      const game = new Game(new Identifier(1), new Name("test game"))
-      const player = new Player(new Identifier(2), new Name("Davey McDaveson"))
+      const game = new Game(new Identifier(), new Name("test game"))
+      const player = new Player(new Identifier(), new Name("Davey McDaveson"))
 
       game.AddPlayer(player)
 
