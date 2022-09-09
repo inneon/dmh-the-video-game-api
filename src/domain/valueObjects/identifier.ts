@@ -1,14 +1,14 @@
-import { NegativeIdError } from "../errors"
+import * as crypto from "crypto"
 
 class Identifier {
-  private _value: number
+  private _value: string
 
-  public constructor(value: number) {
-    if (value < 0) {
-      throw new NegativeIdError()
-    }
+  public constructor() {
+    this._value = crypto.randomUUID()
+  }
 
-    this._value = value
+  public equals(other: Identifier) {
+    return this._value === other._value
   }
 }
 

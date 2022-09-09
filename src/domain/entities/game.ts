@@ -14,7 +14,7 @@ class Game extends AggregateRoot<Identifier> {
   }
 
   public AddPlayer(player: Player) {
-    if (this._players.some(({ id }) => id === player.id)) {
+    if (this._players.some(({ id }) => id.equals(player.id))) {
       throw new DuplicatePlayerAddedError(player)
     }
 
