@@ -10,6 +10,10 @@ class Identifier {
   public equals(other: Identifier) {
     return this._value === other._value
   }
+
+  public get value() {
+    return this._value
+  }
 }
 
 export default Identifier
