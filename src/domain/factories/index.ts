@@ -1,1 +1,1 @@
-export { default as GameFactory } from "./gameFactory"
+export { default as gameFactory } from "./gameFactory"
