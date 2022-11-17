@@ -1,4 +1,4 @@
-import { HandlerNotFoundError } from "../errors"
+import { HandlerAlreadyRegisteredError, HandlerNotFoundError } from "../errors"
 import { Query } from "./queries"
 import { InMemoryQueryDispatcher } from "./queryDispatcher"
 import { QueryHandler } from "./queryHandler"
@@ -22,7 +22,7 @@ describe("InMemoryQueryDispatcher", () => {
     const dispatcher = new InMemoryQueryDispatcher()
     dispatcher.register(queryHandler)
 
-    await dispatcher.handle(query)
+    await dispatcher.dispatch(query)
 
     expect(handlerLogic).toBeCalled()
   })
@@ -34,8 +34,35 @@ describe("InMemoryQueryDispatcher", () => {
 
     const dispatcher = new InMemoryQueryDispatcher()
 
-    await expect(async () => dispatcher.handle(query)).rejects.toThrowError(
+    await expect(async () => dispatcher.dispatch(query)).rejects.toThrowError(
       new HandlerNotFoundError(typeof query),
+    )
+  })
+
+  it("rejects registering a handler where one is already assigned", () => {
+    const dispatcher = new InMemoryQueryDispatcher()
+
+    const originalHander: QueryHandler<
+      number,
+      Query<number, "testQuery">,
+      "testQuery"
+    > = {
+      key: "testQuery",
+      handle: async () => jest.fn()(),
+    }
+    dispatcher.register(originalHander)
+
+    const duplicateHandler: QueryHandler<
+      number,
+      Query<number, "testQuery">,
+      "testQuery"
+    > = {
+      key: "testQuery",
+      handle: async () => jest.fn()(),
+    }
+
+    expect(() => dispatcher.register(duplicateHandler)).toThrow(
+      new HandlerAlreadyRegisteredError("testQuery"),
     )
   })
 })
