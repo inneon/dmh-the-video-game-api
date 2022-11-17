@@ -9,11 +9,9 @@ export interface QueryDispatcher {
 }
 
 export class InMemoryQueryDispatcher implements QueryDispatcher {
-  private handlers: { [key: string]: QueryHandler<any, any, any> } = {}
+  private handlers: { [key: string]: QueryHandler<any, any> } = {}
 
-  register<Result, Key extends string, TQuery extends Query<Result, Key>>(
-    handler: QueryHandler<Result, TQuery, Key>,
-  ) {
+  register<Result, Key extends string>(handler: QueryHandler<Result, Key>) {
     if (this.handlers[handler.key]) {
       throw new HandlerAlreadyRegisteredError(handler.key)
     }

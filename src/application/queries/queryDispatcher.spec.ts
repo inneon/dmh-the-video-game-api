@@ -10,11 +10,7 @@ describe("InMemoryQueryDispatcher", () => {
     }
 
     const handlerLogic = jest.fn(() => 0)
-    const queryHandler: QueryHandler<
-      number,
-      Query<number, "testQuery">,
-      "testQuery"
-    > = {
+    const queryHandler: QueryHandler<number, "testQuery"> = {
       key: "testQuery",
       handle: async () => handlerLogic(),
     }
@@ -42,21 +38,13 @@ describe("InMemoryQueryDispatcher", () => {
   it("rejects registering a handler where one is already assigned", () => {
     const dispatcher = new InMemoryQueryDispatcher()
 
-    const originalHander: QueryHandler<
-      number,
-      Query<number, "testQuery">,
-      "testQuery"
-    > = {
+    const originalHander: QueryHandler<number, "testQuery"> = {
       key: "testQuery",
       handle: async () => jest.fn()(),
     }
     dispatcher.register(originalHander)
 
-    const duplicateHandler: QueryHandler<
-      number,
-      Query<number, "testQuery">,
-      "testQuery"
-    > = {
+    const duplicateHandler: QueryHandler<number, "testQuery"> = {
       key: "testQuery",
       handle: async () => jest.fn()(),
     }
