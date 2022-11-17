@@ -1,9 +1,11 @@
-import { HandlerNotFoundError } from "../errors"
+import { HandlerAlreadyRegisteredError, HandlerNotFoundError } from "../errors"
 import { Query } from "./queries"
 import { QueryHandler } from "./queryHandler"
 
 export interface QueryDispatcher {
-  handle<Result, Key extends string>(query: Query<Result, Key>): Promise<Result>
+  dispatch<Result, Key extends string>(
+    query: Query<Result, Key>,
+  ): Promise<Result>
 }
 
 export class InMemoryQueryDispatcher implements QueryDispatcher {
@@ -12,10 +14,13 @@ export class InMemoryQueryDispatcher implements QueryDispatcher {
   register<Result, Key extends string, TQuery extends Query<Result, Key>>(
     handler: QueryHandler<Result, TQuery, Key>,
   ) {
+    if (this.handlers[handler.key]) {
+      throw new HandlerAlreadyRegisteredError(handler.key)
+    }
     this.handlers[handler.key] = handler
   }
 
-  async handle<Result, Key extends string>(
+  async dispatch<Result, Key extends string>(
     query: Query<Result, Key>,
   ): Promise<Result> {
     const handler = this.handlers[query.key]
